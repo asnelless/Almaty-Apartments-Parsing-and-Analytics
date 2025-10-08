@@ -29,11 +29,11 @@ Apache Superset - interactive dashboard (I used **Docker** to run Apache Superse
 
 &nbsp;&nbsp;&nbsp;&nbsp; During the project, I faced some challenges:
 
-1. Web Scraping limitations — it was not feasible to send too many requests or parse hundreds of pages, since [krisha.kz](https://www.krisha.kz/) could temporarily block the IP. For this reason, I decided around 100 listings were sufficient for practice.
+1. Web Scraping limitations. It was not feasible to send too many requests or parse hundreds of pages, since [krisha.kz](https://www.krisha.kz/) could temporarily block the IP. Not to trigger the limit, I decided around 100 listings were sufficient for practice.
 
-2. Incorrect area extraction — the regex pattern `r"(\d+)\s*м²"` sometimes captured the wrong numbers (e.g., floor values) instead of the actual apartment area. This caused my `price_per_m2` formula to miscalculate in some cases. To fix it, I refined the parsing logic to target only the number preceding “м²”, ignore fractions, and filter unrealistic areas (e.g., `area_m2 < 10` is not a real area).
+2. Incorrect area extraction. The regex pattern `r"(\d+)\s*м²"` sometimes captured the wrong numbers (e.g., floor values) instead of the actual apartment area. This caused my `price_per_m2` formula to miscalculate in some cases. To fix it, I refined the parsing logic to target only the number preceding “м²”, ignore fractions, and filter unrealistic areas (e.g., `area_m2 < 10` is not a real area).
 
-3. Geocoding limitations — to visualize listings on a map, I had to geocode addresses (convert them into `latitude` and `longitude`). I used the **Google Maps Geocoding API**, but it also has daily request limits, which required caching.
+3. Geocoding limitations. To visualize listings on a map, I had to geocode addresses == convert them into `latitude` and `longitude`. I used the **Google Maps Geocoding API**, but it also has daily request limits, which required caching.
 
 ## **How to Reproduce** 
 
@@ -50,13 +50,11 @@ Apache Superset - interactive dashboard (I used **Docker** to run Apache Superse
 ## **Interactive Dashboard Import**
 
 You can explore the interactive version of this dashboard directly in Apache Superset by importing the provided `dashboard_for_import.zip` file.
-1. Open your Superset instance.
+1. Open your Superset instance. Settings → Import Dashboards.
 
-2. Navigate to Settings → Import Dashboards.
+2. Upload `dashboard_for_import.zip`.
 
-3. Upload `dashboard_for_import.zip`.
-
-4. Superset will automatically create the charts, datasets, and layout. Then, you will see the “Almaty Apartments Analytics” dashboard in your list of dashboards. Note that you must have Superset version >= 2.0.
+3. Superset will automatically create the charts. Then, you will see the “Almaty Apartments Analytics” dashboard in your list of dashboards. Note that you must have Superset version >= 2.0.
 
 
 
