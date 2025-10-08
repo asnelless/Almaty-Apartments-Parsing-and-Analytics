@@ -1,7 +1,8 @@
 This repo contains step-by-step pipeline to analyze the real estate ads in Almaty, Kazakhstan. The dataset was collected from [Krisha](https://www.krisha.kz/) (Kazakhstan’s largest real estate platform) and visualized using [Apache Superset](https://superset.apache.org/). 
 
 
-![Dashboard Preview](https://github.com/user-attachments/assets/65fde8b7-f4d3-4a96-9d87-2273f5331ba6)
+![Demo](./assets/preview_dashboard.gif)
+
 
 To install dependencies, run `pip install requests beautifulsoup4 lxml pandas tqdm` and `pip install geopy tqdm`.
 
@@ -13,17 +14,26 @@ To install dependencies, run `pip install requests beautifulsoup4 lxml pandas tq
 
 PostgreSQL - storage and queries
 
-Apache Superset - interactive dashboard 
+Apache Superset - interactive dashboard (I used **Docker** to run Apache Superset locally, as it provides an isolated environment and makes setup significantly easier)
 
---------------------------------------------------------------------------------
 ## **Project Workflow**
 
 1. Data Collection: scraped apartment listings from [krisha.kz](https://www.krisha.kz/) including titles, prices, locations, link, and apartment features (number of rooms and area in m2) 
 
-2. Data Cleaning & Preparation: converted raw listings to structured CSV, parsed latitude and longitude, calculated `price_per_m2`, retrieved `district` via adresses 
+2. Data Cleaning & Preparation: converted raw listings to structured CSV, parsed latitude and longitude, calculated `price_per_m2`, retrieved `district` via adresses. 
 
-3. Visualization in Superset using interactive dashboard with multiple chart types (see `/dashboard_apache_superset.jpg` for a snapshot) 
 
+3. Visualization in Superset using interactive dashboard with multiple chart types (see `/dashboard_apache_superset.jpg` for a snapshot)
+   
+--------------------------------------------------------------------------------
+
+&nbsp;&nbsp;&nbsp;&nbsp; During the project, I faced some challenges:
+
+1. Web Scraping limitations — it was not feasible to send too many requests or parse hundreds of pages, since [krisha.kz](https://www.krisha.kz/) could temporarily block the IP. For this reason, I decided around 100 listings were sufficient for practice.
+
+2. Incorrect area extraction — the regex pattern `r"(\d+)\s*м²"` sometimes captured the wrong numbers (e.g., floor values) instead of the actual apartment area. This caused my `price_per_m2` formula to miscalculate in some cases. To fix it, I refined the parsing logic to target only the number preceding “м²”, ignore fractions, and filter unrealistic areas (e.g., `area_m2 < 10` is not a real area).
+
+3. Geocoding limitations — to visualize listings on a map, I had to geocode addresses (convert them into `latitude` and `longitude`). I used the **Google Maps Geocoding API**, but it also has daily request limits, which required caching.
 
 ## **How to Reproduce** 
 
